@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ "$(git show "--format=%f%b" -s HEAD)" = "FREEZE.unindexed" ]
+then
+  git reset --mixed HEAD~
+fi
+
+if [ "$(git show "--format=%f%b" -s HEAD)" = "FREEZE.indexed" ]
+then
+  git reset --soft HEAD~
+fi
+
+git status

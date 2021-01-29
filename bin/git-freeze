@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+git status
+
+git commit --no-verify -m FREEZE.indexed || echo "No staged changes."
+git add -A --ignore-errors
+git commit --no-verify -m FREEZE.unindexed || echo "No unstaged changes."
