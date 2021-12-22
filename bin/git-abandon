@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "Freezing uncommitted changes in: refs/last-freeze"
+
+echo "--------"
+HASH="$(git rev-parse HEAD)"
+# TODO: This requires depot_tools or https://github.com/lgarron/git-freeze
+git freeze
+git update-ref refs/last-freeze HEAD
+git log --pretty=oneline "${HASH}...HEAD"
+
+echo "--------"
+LAST_FREEZE_HASH="$(git rev-parse refs/last-freeze)"
+echo "Frozen as \`refs/last-freeze\` with the hash: ${LAST_FREEZE_HASH}"
+echo "(This will eventually be garbage-collected by \`git\`.)"
+
+echo "--------"
+echo "Abandoning all uncommitted (frozen) changes."
+git reset --hard "${HASH}"
